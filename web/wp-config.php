@@ -148,9 +148,9 @@ define('NONCE_SALT',       'uBW!%ut#F]]5Etl3MwAi|;9 82#qY9(x:])4BU*y{4BrSHk^hT&E
 // ======================
 // Hide errors by default
 // ======================
-ini_set( 'display_errors', 0 );
-define( 'WP_DEBUG_DISPLAY', 0 );
-define( 'WP_DEBUG', 0 );
+ini_set( 'display_errors', 1 );
+define( 'WP_DEBUG_DISPLAY', 1 );
+define( 'WP_DEBUG', 1 );
 
 // =========================
 // Disable automatic updates

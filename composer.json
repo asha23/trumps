@@ -1,14 +1,14 @@
 {
-    "name": "arlo-base-wordpress",
+    "name": "Trumps",
     "type": "project",
     "license": "MIT",
-    "description": "Arlo Wordpress base installation",
+    "description": "Headless React Top Trumps",
     "authors": [{
         "name": "Ash Whiting",
         "email": "ash_whiting@hotmail.com"
     }],
     "keywords": [
-        "Arlo", "wordpress framework", "base theme", "wordpress", "composer", "vagrant", "wp"
+        "React", "wordpress framework", "base theme", "wordpress", "composer", "vagrant", "wp"
     ],
     "repositories": {
         "wp-packagist": {
@@ -20,10 +20,10 @@
             "package": {
                 "name": "asha23/wp-seed",
                 "type": "wordpress-theme",
-                "version": "0.4.0",
+                "version": "0.4.2",
                 "dist": {
                     "type": "zip",
-                    "url": "https://github.com/asha23/wp-seed/archive/v0.4.0.zip"
+                    "url": "https://github.com/asha23/wp-seed/archive/v0.4.2.zip"
                 }
             }
         },
@@ -62,16 +62,11 @@
         "johnpbloch/wordpress": "*",
 		"vlucas/phpdotenv": "^2.0.1",
 		"oscarotero/env": "^1.0",
-        "wpackagist-plugin/tinymce-advanced": "*",
-        "wpackagist-plugin/yoast-seo-acf-analysis": "*",
-        "wpackagist-plugin/post-types-order": "*",
-        "wpackagist-plugin/duplicate-post": "*",
-        "wpackagist-plugin/simple-image-sizes": "*",
-        "wpackagist-plugin/post-terms-order": "*",
-        "wpackagist-plugin/wordpress-seo": "*",
-        "wpackagist-plugin/advanced-custom-fields-table-field": "*",
+        "wpackagist-plugin/acf-to-rest-api": "*",
 		"advanced-custom-fields/advanced-custom-fields-pro": "*",
+        "wpackagist-plugin/markdown-editor": "*",
 		"wp-sync-db/wp-sync-db": "*",
+        "wpackagist-plugin/advanced-custom-fields-markdown": "*",
         "asha23/wp-seed": "*"
     },
     "extra": {
