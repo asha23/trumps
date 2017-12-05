@@ -6,7 +6,9 @@ class Card extends Component {
         ? 'url(img/hidden.png)'
         : 'url(img/' + this.props.face + '.png');
 
-        let cardStyle = {backgroundImage: bgUrl};
+        let cardStyle = {
+          backgroundImage: bgUrl
+        };
 
         return (
           <div className="card" style={cardStyle} />

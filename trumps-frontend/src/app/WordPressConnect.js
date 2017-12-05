@@ -20,10 +20,8 @@ class WordPressConnect extends Component {
         .then(res => res.json())
         .then(cards => this.setState((prevState, props) => {
             return {
-              cards: cards.map(this.mapCard),
-              shuffled: cards.map(this.shuffleArray)
+              cards: cards.map(this.mapCard)
             };
-
         }));
   }
 
@@ -70,6 +68,8 @@ class WordPressConnect extends Component {
     );
   }
 }
+
+console.log(cards);
 
 // const mapStateToProps = store => {
 //   return {

@@ -1,12 +1,43 @@
 import React, { Component } from 'react';
-import CardDeck from './app/CardDeck';
-import WordPressConnect from './app/WordPressConnect';
+import CardDeck from './CardDeck';
 
 class App extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      cards: [],
+      dataRoute: 'http://trumps.local/wp-json/wp/v2/trumps?_embed'
+    }
+  }
+
+  componentDidMount = () => {
+    fetch(this.state.dataRoute)
+        .then(res => res.json())
+        .then(cards => this.setState((prevState, props) => {
+            return {
+              cards: cards.map(this.mapCard)
+            };
+        }));
+  }
+
+  mapCard = (card) => {
+
+    return {
+      title: card.title.rendered,
+      image: card.acf.image,
+      value_1: card.acf.value_1,
+      value_2: card.acf.value_2,
+      value_3: card.acf.value_3,
+      value_4: card.acf.value_4
+    }
+
+  }
+
   getInitialState = () => {
-    // Set the initial state as the cards array from Wordpress
+
     return (
-      cards: [{v:11, f:"c5"}]
+      cards: cards
     )
   }
 
@@ -19,7 +50,7 @@ class App extends Component {
 
   render() {
     return(
-      <CardDeck deck={this.shuffleDeck(this.state.cards)} />
+      <CardDeck cards={this.shuffleDeck(this.state.cards)} />
     )
   }
 }
