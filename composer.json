@@ -63,7 +63,7 @@
 		"vlucas/phpdotenv": "^2.0.1",
 		"oscarotero/env": "^1.0",
         "wpackagist-plugin/acf-to-rest-api": "*",
-		"advanced-custom-fields/advanced-custom-fields-pro": "*",
+		"advanced-custom-fields/advanced-custom-fields-pro": "5.5.7",
         "wpackagist-plugin/markdown-editor": "*",
 		"wp-sync-db/wp-sync-db": "*",
         "wpackagist-plugin/advanced-custom-fields-markdown": "*",
