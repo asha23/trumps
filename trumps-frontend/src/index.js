@@ -5,5 +5,5 @@ import WordPressConnect from './app/WordPressConnect';
 import registerServiceWorker from './registerServiceWorker';
 import 'bootstrap/dist/css/bootstrap.css';
 
-ReactDOM.render(<WordPressConnect />, document.getElementById('root'));
+ReactDOM.render(<App />, document.getElementById('root'));
 registerServiceWorker();
