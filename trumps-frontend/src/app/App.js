@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import CardDeck from './CardDeck';
+//import CardDeck from './CardDeck';
 
 class App extends Component {
 
@@ -7,51 +7,78 @@ class App extends Component {
     super(props);
     this.state = {
       cards: [],
-      dataRoute: 'http://trumps.local/wp-json/wp/v2/trumps?_embed'
+      deck: [],
+      dataRoute: 'http://trumps.local/wp-json/wp/v2/trumps?_embed',
+      decks:""
+
     }
+
+    //this.doCards = this.doCards.bind(this);
+    this.shuffleCards = this.shuffleCards.bind(this);
+
   }
 
   componentDidMount = () => {
+    let deck = []
+    let image = "";
+    let title = "";
+    let value_1 = "";
+    let value_2 = "";
+    let value_3 = "";
+    let value_4 = "";
+
     fetch(this.state.dataRoute)
         .then(res => res.json())
         .then(cards => this.setState((prevState, props) => {
-            return {
-              cards: cards.map(this.mapCard)
-            };
+
+            for (let i=0; i<cards.length; i++) {
+
+              title = cards[i]['title']['rendered'];
+              image = cards[i]['acf']['image'];
+              value_1 = cards[i]['acf']['value_1'];
+              value_2 = cards[i]['acf']['value_2'];
+              value_3 = cards[i]['acf']['value_3'];
+              value_4 = cards[i]['acf']['value_4'];
+
+              deck.push({
+                "title":title,
+                "image":image,
+                "val1":value_1,
+                "val2":value_2,
+                "val3":value_3,
+                "val4":value_4
+              });
+
+            }
+
         }));
-  }
 
-  mapCard = (card) => {
-
-    return {
-      title: card.title.rendered,
-      image: card.acf.image,
-      value_1: card.acf.value_1,
-      value_2: card.acf.value_2,
-      value_3: card.acf.value_3,
-      value_4: card.acf.value_4
-    }
+        
 
   }
 
-  getInitialState = () => {
-
-    return (
-      cards: cards
-    )
-  }
-
-  shuffleDeck = (cards) => {
-    for (let i = cards.length - 1; i > 0; i--) {
+  shuffleCards(deck) {
+    for (let i = deck.length - 1; i > 0; i--) {
         let j = Math.floor(Math.random() * (i + 1));
-        [cards[i], cards[j]] = [cards[j], cards[i]];
+        [deck[i], deck[j]] = [deck[j], deck[i]];
     }
+    console.log("hello")
+    this.setState({
+      decks:deck
+    })
   }
+
+
 
   render() {
-    return(
-      <CardDeck cards={this.shuffleDeck(this.state.cards)} />
-    )
+
+      return (
+        <div>
+          {this.state.decks}
+        </div>
+    );
+
+
   }
 }
 

@@ -4,7 +4,7 @@ class Card extends Component {
   render() {
     var bgUrl = (this.props.hidden)
         ? 'url(img/hidden.png)'
-        : 'url(img/' + this.props.face + '.png');
+        : 'url(img/' + this.props.face + '.png)'
 
         let cardStyle = {
           backgroundImage: bgUrl

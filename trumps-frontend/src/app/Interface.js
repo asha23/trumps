@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
+import Outcome from './Outcome';
 
 class Interface extends Component {
   getDefaultProps = () => {
-    return {
-      status: new
-    }
+
   }
 
   render() {
         return (
             <div className='panel interface'>
-                {/* Outcome component child of Interface */}
+
                 <Outcome status={this.props.status}/>
 
                 <div className="btn-group btn-group-justified" role="group" aria-label="score">
@@ -22,7 +21,6 @@ class Interface extends Component {
 
                 <div className="btn-group btn-group-justified" role="group" aria-label="game">
                     <div className="btn-group" role="group">
-                        {/* received as props to the Interface component the handleDeal function is now bound to the onClick event */}
                         <button onClick={this.props.deal} type="button" className="btn btn-info">Deal</button>
                     </div>
                     <div className="btn-group" role="group">

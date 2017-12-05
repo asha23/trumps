@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import Card from './app/Card';
-import Interface from './app/Interface';
+import Card from './Card';
+import Interface from './Interface';
 import Hand from './Hand';
 
 class CardDeck extends Component {
