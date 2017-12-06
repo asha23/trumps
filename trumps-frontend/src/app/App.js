@@ -1,4 +1,140 @@
-import React, { Component } from 'react';
+import React from 'react';
+import ajax from 'superagent';
+
+
+
+class App extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            mode: 'deal',
+            cards:[]
+        }
+
+
+    }
+
+    componentWillMount() {
+        this.fetchFeed()
+    }
+
+    createDeck() {
+        // let deck = [];
+        // let cardVal = this.state.cards;
+        // let title;
+        //let image;
+        // let val1;
+        // let val2;
+        // let val3;
+        // let val4;
+        //let deck = [];
+
+
+        // const fullDeck = this.state.cards.map((card, index) => {
+        //         title = card.title.rendered
+        //         //image = card.image;
+        //         val1 = card.acf.value_1
+        //         val2 = card.acf.value_2
+        //         val3 = card.acf.value_3
+        //         val4 = card.acf.value_4
+        //
+        //         return (
+        //             <div>
+        //             </div>
+        //         )
+        // })
+
+
+
+
+    }
+
+    shuffleDeck() {
+
+        // for (let i = deck.length - 1; i > 0; i--) {
+        //     let j = Math.floor(Math.random() * (i + 1));
+        //     [deck[i], deck[j]] = [deck[j], deck[i]];
+        // }
+
+    }
+
+    renderCards() {
+
+        let title;
+        //let image;
+        let val1;
+        let val2;
+        let val3;
+        let val4;
+
+        return this.state.cards.map((card, index) => {
+
+            title = card.title.rendered;
+            //image = card.image;
+            val1 = card.acf.value_1;
+            val2 = card.acf.value_2;
+            val3 = card.acf.value_3;
+            val4 = card.acf.value_4;
+
+            return(
+                <div className="col-sm-3" key={index} style={{position:'absolute'}}>
+                    <div className="card">
+                        <div className="card-header"><h2><strong>{title}</strong></h2></div>
+                        <button className="btn btn-primary">Drunk Factor: {val1}</button><br/>
+                        <button className="btn btn-primary">Hangover Factor: {val2}</button><br/>
+                        <button className="btn btn-primary">Embarrassment Factor: {val3}</button><br/>
+                        <button className="btn btn-primary">Annoying Factor: {val4}</button>
+                    </div>
+                </div>
+                // <p key={index}>
+                //     <strong>{title}</strong>
+                // </p>
+            )
+        })
+    }
+
+    fetchFeed() {
+
+        ajax.get('http://trumps.local/wp-json/wp/v2/trumps?per_page=100')
+            .end((error, response) => {
+                if(!error && response) {
+                    this.setState({ cards: response.body})
+                    //console.dir(response.body[0].title.rendered);
+                } else {
+                    console.log("error");
+                }
+            })
+    }
+
+    selectMode(mode) {
+        this.setState({ mode });
+    }
+
+    render() {
+        let content;
+        //let fullDeck;
+
+        if (this.state.mode === 'deal') {
+            content = this.renderCards();
+            //fullDeck = this.createDeck();
+            //this.shuffleDeck(fullDeck)
+            //console.log(fullDeck);
+        }
+
+        return (
+            <div>
+                <button onClick={this.selectMode.bind(this, 'deal')}>Deal</button>
+                {content}
+
+            </div>
+        )
+
+
+    }
+}
+
+
 //import CardDeck from './CardDeck';
 
 // class App extends Component {
@@ -84,40 +220,40 @@ import React, { Component } from 'react';
 //
 // }
 
-class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      cards: []
-    }
-  }
-componentDidMount() {
-    let dataURL = "http://trumps.local/wp-json/wp/v2/trumps?per_page=100";
-    fetch(dataURL)
-      .then(res => res.json())
-      .then(res => {
-        
-        this.setState({
-          cards: res
-        })
-      })
-  }
-render() {
-    let cards = this.state.cards.map((card, index) => {
-      return <div key={index}>
-              <p><strong>Title:</strong> {card.title.rendered}</p>
-              <p><strong>Drunk Factor:</strong> {card.acf.value_1}</p>
-              <p><strong>Hangover:</strong> {card.acf.value_2}</p>
-              <p><strong>Embarrassment Level:</strong> {card.acf.value_3}</p>
-              <p><strong>People Offended:</strong> {card.acf.value_4} </p>
-            </div>
-    });
-return (
-      <div>
-        {cards}
-      </div>
-    )
-  }
-}
+// class App extends Component {
+//   constructor() {
+//     super();
+//     this.state = {
+//       cards: []
+//     }
+//   }
+// componentDidMount() {
+//     let dataURL = "http://trumps.local/wp-json/wp/v2/trumps?per_page=100";
+//     fetch(dataURL)
+//       .then(res => res.json())
+//       .then(res => {
+//
+//         this.setState({
+//           cards: res
+//         })
+//       })
+//   }
+// render() {
+//     let cards = this.state.cards.map((card, index) => {
+//       return <div key={index}>
+//               <p><strong>Title:</strong> {card.title.rendered}</p>
+//               <p><strong>Drunk Factor:</strong> {card.acf.value_1}</p>
+//               <p><strong>Hangover:</strong> {card.acf.value_2}</p>
+//               <p><strong>Embarrassment Level:</strong> {card.acf.value_3}</p>
+//               <p><strong>People Offended:</strong> {card.acf.value_4} </p>
+//             </div>
+//     });
+// return (
+//       <div>
+//         {cards}
+//       </div>
+//     )
+//   }
+// }
 
 export default App;
