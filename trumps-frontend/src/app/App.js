@@ -1,257 +1,180 @@
-import React from 'react';
-import ajax from 'superagent';
+import React, { Component } from 'react';
+import './App.css';
 
 
+// TODO: make the per_page value dynamic - it could be
+// TODO: write some proper tests for everything
+// TODO: Make the whole thing 100% ES6
 
-class App extends React.Component {
+// Grab the json API from the WordPress installation
+const DATA = 'http://trumps.local/wp-json/wp/v2/trumps?per_page=100';
+
+
+class App extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            mode: 'deal',
-            cards:[]
+          deck1:null,
+          deck2:null,
+          list:null
+        };
+
+        this.callData = this.callData.bind(this);
+        this.doDataState = this.doDataState.bind(this);
+        this.shuffleCards = this.shuffleCards.bind(this);
+        this.dealTwoSets = this.dealTwoSets.bind(this);
+        this.dealAllCards = this.dealAllCards.bind(this);
+        this.selectOption = this.selectOption.bind(this);
+    };
+
+    // Call up the data when the app starts
+
+    componentDidMount() {
+      this.callData();
+    };
+
+    dealAllCards(data) {
+        this.callData(data)
+    };
+
+    selectOption(theState) {
+        console.log(theState);
+    }
+
+    // Do the data - Returns "list" as an object/array
+    callData(data) {
+        fetch(`${DATA}`)
+          .then(list => list.json())
+          .then(list => this.doDataState(list))
+          .catch(e => e); // TODO - Create a proper error checking system
+    };
+
+    // GAME LOGIC
+    // =========================================================================
+
+    // I know, It just calls another function...
+    // Might need it at some point so left this here
+    doDataState(list) {
+        this.shuffleCards(list);
+    };
+
+    // Shuffle the cards
+    shuffleCards(list) {
+        for (let i = list.length - 1; i > 0; i--) {
+            let j = Math.floor( Math.random() * ( i + 1 ) );
+            [ list[i], list[j] ] = [ list[j], list[i] ];
         }
 
+        this.dealTwoSets(list);
+    };
 
+    // Deal 2 sets of cards
+    dealTwoSets(list) {
+
+        let deck1 = [];
+        let deck2 = [];
+
+        // Create 2 deck arrays
+        // TODO: Create option for more than 2 players
+        for(let i = 0; i < list.length; i ++) {
+            if ( ( i + 2 ) % 2 === 0) {
+                deck1.push(list[i]);
+            } else {
+                deck2.push(list[i]);
+            }
+        }
+
+        this.dealCard(deck1, deck2);
+
+    };
+
+    // Pick a card for each player (shift it from the array)
+    dealCard(deck1, deck2) {
+        let player1Card = deck1.shift();
+        let player2Card = deck2.shift();
+
+        if(!player1Card.acf.image) {
+            player1Card.acf.image = "No Image"
+        }
+
+        if(!player2Card.acf.image) {
+            player2Card.acf.image = "No Image"
+        }
+
+        console.log(player1Card.acf.image);
+
+        // Show each player some cards
+        this.setState({
+
+            // Player 1
+            p1Title: player1Card.title.rendered,
+            p1Image: player1Card.acf.image,
+            p1Val1: player1Card.acf.value_1,
+            p1Val2: player1Card.acf.value_2,
+            p1Val3: player1Card.acf.value_3,
+            p1Val4: player1Card.acf.value_4,
+
+            // Player 2
+            p2Title: player2Card.title.rendered,
+            p2Image: player2Card.acf.image,
+            p2Val1: player2Card.acf.value_1,
+            p2Val2: player2Card.acf.value_2,
+            p2Val3: player2Card.acf.value_3,
+            p2Val4: player2Card.acf.value_4,
+
+        });
     }
 
-    componentWillMount() {
-        this.fetchFeed()
-    }
-
-    createDeck() {
-        // let deck = [];
-        // let cardVal = this.state.cards;
-        // let title;
-        //let image;
-        // let val1;
-        // let val2;
-        // let val3;
-        // let val4;
-        //let deck = [];
 
 
-        // const fullDeck = this.state.cards.map((card, index) => {
-        //         title = card.title.rendered
-        //         //image = card.image;
-        //         val1 = card.acf.value_1
-        //         val2 = card.acf.value_2
-        //         val3 = card.acf.value_3
-        //         val4 = card.acf.value_4
-        //
-        //         return (
-        //             <div>
-        //             </div>
-        //         )
-        // })
+    // REACT / FRONTEND
+    // =========================================================================
+    render() {
+        return (
 
+            <div className="container" >
+                <div className="row">
+                    <div className="card col-md-6">
+                        <h3>Player 1</h3>
+                        <p>{this.state.p1Title}</p>
+                        <p>{this.state.p1Image}</p>
+                        <p>
+                            Drunk Factor: {this.state.p1Val1}
+                            <button onClick={() => this.selectOption(this.state.p1Val1)}>Select</button>
+                        </p>
+                        <p>
+                            Hangover Length: {this.state.p1Val2}
+                            <button onClick={() => this.selectOption(this.state.p1Val2)}>Select</button>
+                        </p>
+                        <p>
+                            Embrarrassment Level: {this.state.p1Val3}
+                            <button onClick={() => this.selectOption(this.state.p1Val3)}>Select</button>
+                        </p>
+                        <p>
+                            People Offended: {this.state.p1Val4}
+                            <button onClick={() => this.selectOption(this.state.p1Val4)}>Select</button>
+                        </p>
+                    </div>
 
-
-
-    }
-
-    shuffleDeck() {
-
-        // for (let i = deck.length - 1; i > 0; i--) {
-        //     let j = Math.floor(Math.random() * (i + 1));
-        //     [deck[i], deck[j]] = [deck[j], deck[i]];
-        // }
-
-    }
-
-    renderCards() {
-
-        let title;
-        //let image;
-        let val1;
-        let val2;
-        let val3;
-        let val4;
-
-        return this.state.cards.map((card, index) => {
-
-            title = card.title.rendered;
-            //image = card.image;
-            val1 = card.acf.value_1;
-            val2 = card.acf.value_2;
-            val3 = card.acf.value_3;
-            val4 = card.acf.value_4;
-
-            return(
-                <div className="col-sm-3" key={index} style={{position:'absolute'}}>
-                    <div className="card">
-                        <div className="card-header"><h2><strong>{title}</strong></h2></div>
-                        <button className="btn btn-primary">Drunk Factor: {val1}</button><br/>
-                        <button className="btn btn-primary">Hangover Factor: {val2}</button><br/>
-                        <button className="btn btn-primary">Embarrassment Factor: {val3}</button><br/>
-                        <button className="btn btn-primary">Annoying Factor: {val4}</button>
+                    <div className="card col-md-6">
+                        <h3>Player 2</h3>
+                        <p>{this.state.p2Title}</p>
+                        <p>{this.state.p2Image}</p>
+                        <p >Drunk Factor: {this.state.p2Val1}</p>
+                        <p>Hangover Length: {this.state.p2Val2}</p>
+                        <p>Embrarrassment Level: {this.state.p2Val3}</p>
+                        <p>People Offended: {this.state.p2Val4}</p>
                     </div>
                 </div>
-                // <p key={index}>
-                //     <strong>{title}</strong>
-                // </p>
-            )
-        })
-    }
 
-    fetchFeed() {
 
-        ajax.get('http://trumps.local/wp-json/wp/v2/trumps?per_page=100')
-            .end((error, response) => {
-                if(!error && response) {
-                    this.setState({ cards: response.body})
-                    //console.dir(response.body[0].title.rendered);
-                } else {
-                    console.log("error");
-                }
-            })
-    }
 
-    selectMode(mode) {
-        this.setState({ mode });
-    }
 
-    render() {
-        let content;
-        //let fullDeck;
-
-        if (this.state.mode === 'deal') {
-            content = this.renderCards();
-            //fullDeck = this.createDeck();
-            //this.shuffleDeck(fullDeck)
-            //console.log(fullDeck);
-        }
-
-        return (
-            <div>
-                <button onClick={this.selectMode.bind(this, 'deal')}>Deal</button>
-                {content}
-
+                <button onClick={() => this.handleClick()}>Deal</button>
             </div>
-        )
-    }
-}
-
-
-//import CardDeck from './CardDeck';
-
-// class App extends Component {
-//
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       cards: [],
-//       deck: [],
-//       dataRoute: 'http://trumps.local/wp-json/wp/v2/trumps?per_page=100',
-//
-//     }
-//
-//     //this.doCards = this.doCards.bind(this);
-//     //this.CardList = this.CardList.bind(this);
-//
-//   }
-//
-//   componentDidMount = () => {
-//     let deck = []
-//     let image = "";
-//     let title = "";
-//     let value_1 = "";
-//     let value_2 = "";
-//     let value_3 = "";
-//     let value_4 = "";
-//
-//     fetch(this.state.dataRoute)
-//         .then(res => res.json())
-//         .then(cards => this.setState((prevState, props) => {
-//
-//             for (let i=0; i<cards.length; i++) {
-//
-//               title = cards[i]['title']['rendered'];
-//               image = cards[i]['acf']['image'];
-//               value_1 = cards[i]['acf']['value_1'];
-//               value_2 = cards[i]['acf']['value_2'];
-//               value_3 = cards[i]['acf']['value_3'];
-//               value_4 = cards[i]['acf']['value_4'];
-//
-//               deck.push({
-//                 "title":title,
-//                 "image":image,
-//                 "val1":value_1,
-//                 "val2":value_2,
-//                 "val3":value_3,
-//                 "val4":value_4
-//               });
-//
-//             }
-//
-//         }));
-//
-//         console.log(deck)
-//
-//         this.setState({
-//             deck:deck
-//         })
-//
-//
-//
-//         for (let i = deck.length - 1; i > 0; i--) {
-//             let j = Math.floor(Math.random() * (i + 1));
-//             [deck[i], deck[j]] = [deck[j], deck[i]];
-//         }
-//
-//
-//
-//
-//   }
-//
-//   render() {
-//     let cont = this.state.deck.map((cont, index) => {
-//       return <div key={index}>
-//               // <img src={movie._embedded['wp:featuredmedia'][0].media_details.sizes.large.source_url} alt="" />
-//               <p><strong>Title:</strong> { cont.title.rendered}</p>
-//               <p><strong>Val 1:</strong> { cont.acf.val1}</p>
-//               <p><strong>Val 2:</strong> {movie.acf.val2}</p>
-//               <div><strong>Val 3:</strong> {movie.acf.val3} </div>
-//             </div>
-//     }
-//     );
-//
-// }
-
-// class App extends Component {
-//   constructor() {
-//     super();
-//     this.state = {
-//       cards: []
-//     }
-//   }
-// componentDidMount() {
-//     let dataURL = "http://trumps.local/wp-json/wp/v2/trumps?per_page=100";
-//     fetch(dataURL)
-//       .then(res => res.json())
-//       .then(res => {
-//
-//         this.setState({
-//           cards: res
-//         })
-//       })
-//   }
-// render() {
-//     let cards = this.state.cards.map((card, index) => {
-//       return <div key={index}>
-//               <p><strong>Title:</strong> {card.title.rendered}</p>
-//               <p><strong>Drunk Factor:</strong> {card.acf.value_1}</p>
-//               <p><strong>Hangover:</strong> {card.acf.value_2}</p>
-//               <p><strong>Embarrassment Level:</strong> {card.acf.value_3}</p>
-//               <p><strong>People Offended:</strong> {card.acf.value_4} </p>
-//             </div>
-//     });
-// return (
-//       <div>
-//         {cards}
-//       </div>
-//     )
-//   }
-// }
+        );
+    };
+};
 
 export default App;
