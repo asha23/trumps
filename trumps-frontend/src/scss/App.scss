@@ -1,0 +1,73 @@
+
+
+.card {
+    background:#ebebeb!important;
+    margin-bottom:30px;
+    border-radius:13px!important;
+    position:relative;
+
+    .star-trump {
+        position:absolute;
+        left:0;
+        top:0;
+    }
+
+    .star-trump-hide {
+        display:none;
+    }
+
+}
+
+
+
+img {
+    border-top-left-radius:12px!important;
+    border-top-right-radius:12px!important;
+
+
+}
+
+.full {
+    display:block!important;
+    width:100%;
+
+}
+
+.round {
+
+}
+
+.centered {
+    text-align:center;
+}
+
+.text-right {
+    text-align:right;
+}
+
+.text-left {
+
+}
+
+.text-left,
+.text-right {
+    @media(max-width:1024px) {
+        text-align:center;
+
+        button {
+            width:100%;
+        }
+    }
+}
+
+.card-block {
+    padding:20px;
+}
+
+.footer {
+    font-size:9px;
+}
+
+h1 {
+    font-weight:900;
+}
