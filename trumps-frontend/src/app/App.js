@@ -29,7 +29,7 @@ class App extends Component {
           disabled:"disabled",
           star_trump:1,
           disableSelects:"",
-         
+
         };
 
         this.callData = this.callData.bind(this);
@@ -497,10 +497,6 @@ class App extends Component {
 
                 <div className="footer centered">
                     <hr/>
-                    No alcoholic beverages, apart from craft beer, were consumed during the coding of this game. <br/>
-                    No one died. <br/>
-                    Disclaimer: Most of the people featured in this game actually did die. And those that didn't probably wish they were dead.<br/>
-
                 </div>
 
             </div>

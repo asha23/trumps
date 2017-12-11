@@ -15,7 +15,7 @@
                 "class": "",
                 "id": ""
             },
-            "return_format": "array",
+            "return_format": "url",
             "preview_size": "full",
             "library": "all",
             "min_width": "",
@@ -145,6 +145,28 @@
             "default_value": "",
             "layout": "horizontal",
             "return_format": "value"
+        },
+        {
+            "key": "field_5a2b146637c42",
+            "label": "Star Trump",
+            "name": "star_trump",
+            "type": "button_group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "choices": [
+                "Star Trump",
+                "Not Star Trump"
+            ],
+            "allow_null": 0,
+            "default_value": "",
+            "layout": "horizontal",
+            "return_format": "value"
         }
     ],
     "location": [
@@ -177,5 +199,5 @@
     ],
     "active": 1,
     "description": "",
-    "modified": 1512408681
+    "modified": 1512772801
 }
