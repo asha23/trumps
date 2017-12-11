@@ -12,11 +12,17 @@
 
 // Get scripts and class
 
+add_action('wp_enqueue_scripts','trumps_init');
+
+function trumps_init() {
+    wp_enqueue_script( 'manifest-json', plugins_url( 'build/manifest.json', __FILE__ ));
+    wp_enqueue_script( 'trumps-js', plugins_url( 'build/static/js/main.b8b25e77.js', __FILE__ ));
+    wp_enqueue_style( 'trumps-style', plugins_url('build/static/css/main.27057391.css', __FILE__));
+}
+
 // Do the shortcode
 
 function trumps_shortcode() {
-?>
-
-<?php
+  echo '<div id="root"></div>';
 }
 add_shortcode('trumps', 'trumps_shortcode');
