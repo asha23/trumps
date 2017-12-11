@@ -6,7 +6,7 @@
   * Plugin URI: http://github.com/asha23
   * Description: Just a simple plugin to hook up the Trumps Application
   * Version: 0.1
-  * Author: Ash WP_Customize_Header_Image_Control::print_header_image_template
+  * Author: Ash Whiting
   * Author URI: http://ashwhiting.com
 */
 
