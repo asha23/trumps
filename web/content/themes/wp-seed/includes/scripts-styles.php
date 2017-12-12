@@ -15,8 +15,8 @@ function seed_scripts_and_styles() {
 		$assetstr = file_get_contents(dirname(dirname(__FILE__))."/build/manifest.json");
 		$assets = json_decode($assetstr, true);
 		$assets     = array(
-			'css' => '/build/css/styles.min.css' . '?' . $assets['build/css/styles.min.css']['hash'],
-			'js'  => '/build/js/scripts.min.js' . '?' . $assets['build/js/scripts.min.js']['hash'],
+			'css' => '/build/css/styles.min.css', // . '?' . $assets['build/css/styles.min.css']['hash'],
+			'js'  => '/build/js/scripts.min.js', // . '?' . $assets['build/js/scripts.min.js']['hash'],
 		);
 
 		wp_register_script( 'modernizr', get_stylesheet_directory_uri() . '/build/js/modernizr.min.js' );

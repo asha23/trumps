@@ -23,6 +23,6 @@ function trumps_init() {
 // Do the shortcode
 
 function trumps_shortcode() {
-  echo '<div id="root"></div>';
+  echo '<div id="root">This is where the app lives</div>';
 }
 add_shortcode('trumps', 'trumps_shortcode');
