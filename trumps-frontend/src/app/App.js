@@ -3,10 +3,12 @@
 
     TODO: make the per_page value dynamic - it could be
     TODO: write some proper tests for everything
+    TODO: Add a star trump
     TODO: Make the whole thing 100% ES6
     TODO: Learn more React!!!
     TODO: Sort out the issue when a value is 10 - The other player wins - Odd
     TODO: DON'T USE LOCALSTORAGE - Learn Redux.
+    TODO: Fix the draw. At the moment it only works once :(
 */
 
 import React, { Component } from 'react';
@@ -29,6 +31,8 @@ class App extends Component {
           disabled:"disabled",
           star_trump:1,
           disableSelects:"",
+          tookTheWinnings: "",
+
 
         };
 
@@ -42,6 +46,7 @@ class App extends Component {
         this.player1Wins = this.player1Wins.bind(this);
         this.player2Wins = this.player2Wins.bind(this);
         this.bothWin = this.bothWin.bind(this);
+        //this.toggleEndGame = this.toggleEndgame.bind(this);
     };
 
     // Call up the data when the app starts
@@ -125,6 +130,7 @@ class App extends Component {
 
         localStorage.setItem('deck1', JSON.stringify(deck1));
         localStorage.setItem('deck2', JSON.stringify(deck2));
+        localStorage.setItem('deck3', (null));
 
         this.dealCard(deck1, deck2);
 
@@ -199,6 +205,16 @@ class App extends Component {
                 p2Val3: player2Card.acf.value_3,
                 p2Val4: player2Card.acf.value_4,
 
+                // p2Val1Hide: "???",
+                // p2Val2Hide: "???",
+                // p2Val3Hide: "???",
+                // p2Val4Hide: "???",
+
+                p2Val1Hide: player2Card.acf.value_1,
+                p2Val2Hide: player2Card.acf.value_2,
+                p2Val3Hide: player2Card.acf.value_3,
+                p2Val4Hide: player2Card.acf.value_4,
+
 
                 // Cards remaining
 
@@ -209,7 +225,7 @@ class App extends Component {
     }
 
     // Pass it back through for the next card choice
-    nextCard(deck1, deck2, e) {
+    nextCard(deck1, deck2) {
 
         // Get the last cards played
 
@@ -222,12 +238,15 @@ class App extends Component {
             deck1 = JSON.parse(localStorage.getItem('deck1'));
             deck2 = JSON.parse(localStorage.getItem('deck2'));
 
+            // console.dir(deck1);
+            // console.dir(deck2);
+
             this.dealCard(deck1,deck2);
 
             this.setState({
                 result:"",
-                disableSelects:""
-
+                disableSelects:"",
+                tookTheWinnings:""
             })
         }
     }
@@ -261,7 +280,6 @@ class App extends Component {
 
     player1Wins() {
 
-
         // Push player2's card into the end of player 1's deck
         let deck1 = JSON.parse(localStorage.getItem('deck1'));
         let player2Card = JSON.parse(localStorage.getItem('player2Card'));
@@ -284,11 +302,30 @@ class App extends Component {
 
         let deck3 = JSON.parse(localStorage.getItem('deck3'));
 
-        if (deck3) {
+        if (deck3 !== null) {
             // Add items from deck 3 to the end of the pack
-            deck1.push(deck3);
+
+            // TODO: Get better at ES6 and use .map
+            for (let i = 0; i < deck3.length; i++) {
+                deck1.push(deck3[i]);
+            }
+
+            // Push the winnings to deck 1
+            localStorage.setItem('deck1', JSON.stringify(deck1));
+
+            // Clear deck 3
+            localStorage.removeItem('deck3');
+
             this.setState({
-                drawPotSize:deck3.length
+                drawPotSize:0,
+                tookTheWinnings: "You took the winnings!"
+            })
+        } else {
+
+            localStorage.removeItem('deck3');
+
+            this.setState({
+                tookTheWinnings:""
             })
         }
 
@@ -303,6 +340,11 @@ class App extends Component {
             this.setState({
                 player1CardsLeft: deck1.length,
                 player2CardsLeft: deck2.length,
+
+                p2Val1Hide: this.state.p2Val1,
+                p2Val2Hide: this.state.p2Val2,
+                p2Val3Hide: this.state.p2Val3,
+                p2Val4Hide: this.state.p2Val4
             })
         }
 
@@ -328,12 +370,36 @@ class App extends Component {
 
         let deck3 = JSON.parse(localStorage.getItem('deck3'));
 
-        if (deck3) {
+        if (deck3 !== null) {
             // Add items from deck 3 to the end of the pack
-            deck2.push(deck3);
+
+            // Loop over deck 3 and push each item in turn
+            // TODO: Get better at ES6 and use .map
+            for (let i = 0; i < deck3.length; i++) {
+                deck2.push(deck3[i]);
+            }
+
+            // Push the winnings to deck 1
+            localStorage.setItem('deck1', JSON.stringify(deck1));
+
+            // Clear deck 3
+
+
+            localStorage.removeItem('deck3');
+
 
             this.setState({
-                drawPotSize:deck3.length
+                drawPotSize:0,
+                tookTheWinnings: "I took the winnings!"
+            })
+
+
+        } else {
+
+            localStorage.removeItem('deck3');
+
+            this.setState({
+                tookTheWinnings:""
             })
         }
 
@@ -348,6 +414,11 @@ class App extends Component {
             this.setState({
                 player1CardsLeft: deck1.length,
                 player2CardsLeft: deck2.length,
+
+                p2Val1Hide: this.state.p2Val1,
+                p2Val2Hide: this.state.p2Val2,
+                p2Val3Hide: this.state.p2Val3,
+                p2Val4Hide: this.state.p2Val4
             })
         }
 
@@ -355,22 +426,28 @@ class App extends Component {
 
     bothWin() {
         // Make a pot of cards - Winner of the next hand takes these cards
+        // TODO: If there are more than 2 rounds of draws - Sort that logic
 
         // get both player 1 and player 2's cards
-        let deck3 = []
+        let deck3 = []; // TODO: this is breaking that functionality
         let player1Card = JSON.parse(localStorage.getItem('player1Card'));
         let player2Card = JSON.parse(localStorage.getItem('player2Card'));
         let deck1 = JSON.parse(localStorage.getItem('deck1'));
         let deck2 = JSON.parse(localStorage.getItem('deck2'));
 
         // remove these from both players deck
+
         deck1.shift();
         deck2.shift();
 
+        // Push the updated packs back into local storage
+
+        localStorage.setItem('deck1', JSON.stringify(deck1));
+        localStorage.setItem('deck2', JSON.stringify(deck2));
 
         // add them to a new deck (Deck 3)
 
-        deck3.push(player1Card);
+        deck3.push(player1Card)
         deck3.push(player2Card);
 
         localStorage.setItem('deck3', JSON.stringify(deck3));
@@ -378,34 +455,45 @@ class App extends Component {
         this.setState({
             player1CardsLeft: deck1.length,
             player2CardsLeft: deck2.length,
-            drawPotSize:deck3.length
+            drawPotSize: deck3.length
         })
     }
+
+
 
 
     // When all the cards are gone - do the endgame
     endGame() {
         console.log("endgame");
 
-        this.setState({
-            disabled:""
-        })
+        this.toggleEndGame();
 
+        let deck1 = JSON.parse(localStorage.getItem('deck1'));
+        let deck2 = JSON.parse(localStorage.getItem('deck2'));
+
+        this.setState({
+            disabled:"",
+            player1CardsLeft: deck1.length,
+            player2CardsLeft: deck2.length,
+            hide: !this.state.hide
+        })
     }
 
-    // REACT / FRONTEND
-    // =========================================================================
     render() {
         return (
 
-            <div className="container" >
+            <div className="container">
                 <div className="centered">
                     <h1>TOP DRUNKS</h1>
-                    <p>Draw pot size: {this.state.drawPotSize}</p>
-
+                    <p>Draw pot size: {this.state.drawPotSize}<br/>{this.state.tookTheWinnings}</p>
                 </div>
                 <hr />
-                <div className="row">
+                <div className={'hide-' + this.state.hide} >
+                    <div className="col-md-12">
+                        Wooo Hoo Winner winner chicken dinner
+                    </div>
+                </div>
+                <div className="row" >
 
                     <div className="col-md-4 text-left">
                         <button className="btn btn-primary" onClick={() => this.dealAllCards()}>
@@ -429,7 +517,7 @@ class App extends Component {
                     </div>
                 </div>
                 <hr />
-                <div className="row">
+                <div className="row game-state-playing">
                     <div className="col-xl-2 col-lg-0"></div>
                     <div className="col-xl-4 col-lg-6 col-sm-6">
                         <div className="heading centered">
@@ -439,7 +527,7 @@ class App extends Component {
                             <p>&nbsp;</p>
                         </div>
                         <div className="card" key={this.state.p1ID}>
-                            <div className={this.state.starTrump}>{this.state.starTrumpText}</div>
+                            {/* <div className={this.state.starTrump}>{this.state.starTrumpText}</div> */}
                             <img className="card-img-top round" src={this.state.p1Image} alt={this.state.p1Title} />
                             <div className="card-block">
 
@@ -471,20 +559,20 @@ class App extends Component {
                             <p>&nbsp;</p>
                         </div>
                         <div className="card" key={this.state.p2ID}>
-                            <div className={this.state.starTrump}>{this.state.starTrumpText}</div>
+                            {/* <div className={this.state.starTrump}>{this.state.starTrumpText}</div> */}
                             <img className="card-img-top round" src={this.state.p2Image} alt={this.state.p2Title} />
                             <div className="card-block">
                                 <h3 className="card-title centered">{this.state.p2Title}</h3>
                                 <div className="card-text">
                                     <p>
-                                        <button disabled className="btn btn-disabled full">Drunk Factor: {this.state.p2Val1}</button>
+                                        <button disabled className="btn btn-disabled full">Drunk Factor: {this.state.p2Val1Hide}</button>
                                     </p>
                                     <p>
-                                        <button disabled className="btn btn-disabled full">Hangover Length: {this.state.p2Val2}</button></p>
+                                        <button disabled className="btn btn-disabled full">Hangover Length: {this.state.p2Val2Hide}</button></p>
                                     <p>
-                                        <button disabled className="btn btn-disabled full">Embarrassment Level: {this.state.p2Val3}</button></p>
+                                        <button disabled className="btn btn-disabled full">Embarrassment Level: {this.state.p2Val3Hide}</button></p>
                                     <p>
-                                        <button disabled className="btn btn-disabled full">People Offended: {this.state.p2Val4}</button></p>
+                                        <button disabled className="btn btn-disabled full">People Offended: {this.state.p2Val4Hide}</button></p>
                                 </div>
                             </div>
                         </div>
