@@ -10,6 +10,8 @@ It's very much a work in progress, and there may well be the odd glitch. The Rea
 
 The Trump cards are managed in WordPress using the custom post type "Trumps" - There is a page per card. 
 
+The React part is in the folder /trumps-frontend
+
 ## TODOS
 
 Create a plugin so that the game can run via a shortcode anywhere in a theme. I have made a start on this.      
