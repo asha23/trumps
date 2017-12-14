@@ -10,7 +10,7 @@ It's very much a work in progress, and there may well be the odd glitch. The Rea
 
 The Trump cards are managed in WordPress using the custom post type "Trumps" - There is a page per card. 
 
-#TODOS
+## TODOS
 
 Create a plugin so that the game can run via a shortcode anywhere in a theme. I have made a start on this.      
 Refactor the code using strict ES6 - At present it's a bit of a mish-mash.   
