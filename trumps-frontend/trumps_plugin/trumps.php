@@ -13,8 +13,8 @@
 // Get scripts and class
 
 function trumps_init() {
-    wp_enqueue_script( 'trumps-js', plugins_url( 'build/static/js/main.b179a79a.js', __FILE__ ), array(),  '0.0.1', true );
-    wp_enqueue_style( 'trumps-style', plugins_url('build/static/css/main.6018799b.css', __FILE__));
+    wp_enqueue_script( 'trumps-js', plugins_url( 'build/static/js/main.bbfa2697.js', __FILE__ ), array(),  '0.0.1', true );
+    wp_enqueue_style( 'trumps-style', plugins_url('build/static/css/main.281cc063.css', __FILE__));
 }
 
 add_action('wp_enqueue_scripts','trumps_init');

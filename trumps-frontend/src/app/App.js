@@ -43,7 +43,9 @@ class App extends Component {
           showHide: "shown",
           showEndgame: "hidden",
           winText:"",
-          removeButton:"shown"
+          removeButton:"shown",
+          borderHighlightPlayer1:"card player1",
+          borderHighlightPlayer2:"card",
         };
 
         this.callData = this.callData.bind(this);
@@ -180,12 +182,16 @@ class App extends Component {
 
             this.setState({
                 disableSelects:"disabled",
+                borderHighlightPlayer1:"card",
+                borderHighlightPlayer2:"card player2"
             })
 
         } else {
             this.setState({
                 disabled:"disabled",
-                disableSelects:""
+                disableSelects:"",
+                borderHighlightPlayer1:"card player1",
+                borderHighlightPlayer2:"card"
             })
         }
 
@@ -288,7 +294,8 @@ class App extends Component {
         this.setState({
             result:"I'm thinking...",
             disabled:"disabled",
-            disableSelects:"disabled"
+            disableSelects:"disabled",
+
         })
 
         setTimeout(() => {
@@ -641,7 +648,7 @@ class App extends Component {
                                 <h3>Cards Remaining: {this.state.player1CardsLeft}</h3>
                                 <p>&nbsp;</p>
                             </div>
-                            <div className="card" key={this.state.p1ID}>
+                            <div className={this.state.borderHighlightPlayer1} key={this.state.p1ID}>
 
                                 <img className="card-img-top round" src={this.state.p1Image} alt={this.state.p1Title} />
                                 <div className="card-block">
@@ -692,7 +699,7 @@ class App extends Component {
                                 <h3>Cards Remaining: {this.state.player2CardsLeft}</h3>
                                 <p>&nbsp;</p>
                             </div>
-                            <div className="card" key={this.state.p2ID}>
+                            <div className={this.state.borderHighlightPlayer2} key={this.state.p2ID}>
 
                                 <img className="card-img-top round" src={this.state.p2Image} alt={this.state.p2Title} />
                                 <div className="card-block">
