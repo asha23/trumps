@@ -10,18 +10,12 @@ It's very much a work in progress, and there may well be the odd glitch. The Rea
 
 The Trump cards are managed in WordPress using the custom post type "Trumps" - There is a page per card. 
 
-The React part is in the folder /trumps-frontend
+The React part is in the folder /trumps-frontend - See the readme here for Todos for the React component.
 
 ## TODOS
 
-Create a plugin so that the game can run via a shortcode anywhere in a theme. I have made a start on this.      
-Refactor the code using strict ES6 - At present it's a bit of a mish-mash.   
-Add a Redux store, rather than using localstorage. Whilst this works, it's probably not very good practice.    
-Refactor everything, creating more organised React components - At present everything is in a single app/app.js file.   
-Perhaps use an Atomic pattern methodology.   
-Cache the images - Currently they load a little slowly - Perhaps use offline cacheing to store these in some way.  
-Look at a method of making the game available offline.   
-Perhaps grab all the data on first load and store it.       
+* Create a WordPress plugin so that the game can run via a shortcode anywhere in a theme. I have made a start on this. 
+* Set up a redirect to the game so that when people hit the root, they go straight to it.
 
 To see a demo, visit
 
