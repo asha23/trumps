@@ -6,6 +6,8 @@ Currently this is all contained within the app.js - There are lots of todos!
 
 This calls a json API from the WordPress installation.
 
+## TODOS
+
 Make the per_page value dynamic - it could be   
 Wite some tests for everything   
 Make the whole thing 100% ES6 - Currently it's a bit of a hotchpotch   
