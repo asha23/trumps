@@ -13,6 +13,12 @@ Wite some unit tests for everything.
 Make the whole thing 100% ES6 - Currently it's a bit of a hotchpotch.   
 Learn more React!!! (Obviously)    
 Sort out the issue when a value is 10 - The other player wins - Odd   
-DON'T USE LOCALSTORAGE - Learn Redux.   
+DON'T USE LOCALSTORAGE! - Whilst this works and made tracking the card logic pretty straightforward and quick to achieve, it would probably be better to use Redux.   
 Add a star Trump Card.   
-Lots of refactoring to make this all far more streamlined.   
+Lots of refactoring to make this all far more streamlined. 
+Break it down into more organised React components.   
+Improve the AI. At present it essentially just takes the highest value attribute for each card - Essentially it plays the game like a child, not especially strategically. Create a way for the AI to allow decisions to be made based on knowledge it gains from previous rounds.    
+Preload everything a little more elegantly.   
+Create some nice transitions between rounds.   
+Improve the styling.   
+Make the game playable whilst offline.    
