@@ -12,7 +12,7 @@ The Trump cards are managed in WordPress using the custom post type "Trumps" - T
 
 The React part is in the folder ```/trumps-frontend``` - See the readme here for Todos for the React component.
 
-There is also a WordPress plugin which supplies the application as a shortcode "[trumps]" so this can be integrated directly into your WordPress installation. This plugin is located in ```trumps-frontend/trumps_plugin``` - It's not in the repo as I don't track plugins - See the composer file in the root for details of what's installed.
+There is also a WordPress plugin which supplies the application as a shortcode "[trumps]" so this can be integrated directly into your WordPress installation. This plugin is located in ```trumps-frontend/trumps_plugin``` - It's not in the repo as I don't track plugins - See the composer file in the root for details of what plugins are installed.
 
 This was tested to work in Google Chrome only for now.
 
