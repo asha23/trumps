@@ -12,6 +12,8 @@ The Trump cards are managed in WordPress using the custom post type "Trumps" - T
 
 The React part is in the folder /trumps-frontend - See the readme here for Todos for the React component.
 
+This was tested to work in Google Chrome only.
+
 ## TODOS
 
 * Create a WordPress plugin so that the game can run via a shortcode anywhere in a theme. I have made a start on this. 
