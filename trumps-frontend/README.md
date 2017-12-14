@@ -24,3 +24,4 @@ The main app is in /src/app/app.js
 * Create some nice transitions between rounds.   
 * Improve the styling.   
 * Make the game playable whilst offline.    
+* Once the computer has had it's turn, jump to player 1's turn immediately - Having to click "Next Round" feels a little bit clunky.
