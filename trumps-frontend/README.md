@@ -8,11 +8,11 @@ This calls a json API from the WordPress installation.
 
 ## TODOS
 
-Make the per_page value dynamic - it could be   
-Wite some tests for everything   
-Make the whole thing 100% ES6 - Currently it's a bit of a hotchpotch   
+Make the WordPress posts per_page value dynamic in the API Url. Currently it's set to 100.  
+Wite some unit tests for everything.   
+Make the whole thing 100% ES6 - Currently it's a bit of a hotchpotch.   
 Learn more React!!! (Obviously)    
 Sort out the issue when a value is 10 - The other player wins - Odd   
 DON'T USE LOCALSTORAGE - Learn Redux.   
-Add a star Trump Card   
-Lots of refactoring to make this all far more streamlined   
+Add a star Trump Card.   
+Lots of refactoring to make this all far more streamlined.   
