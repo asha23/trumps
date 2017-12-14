@@ -2,7 +2,7 @@
 
 Created using create-react-app
 
-Currently this is all contained within the app.js - There are lots of todos!
+Currently this is all contained within the app.js
 
 This calls a json API from the WordPress installation.
 
