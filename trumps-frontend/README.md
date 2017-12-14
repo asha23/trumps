@@ -19,7 +19,7 @@ The main app is in /src/app/app.js
 * Add a Star Trump card. (FYI - It's Shane McGowan!)    
 * Lots of refactoring to make this all far more streamlined. 
 * Break it down into more organised React components.   
-* Improve the AI. At present it essentially just takes the highest value attribute for each card - Essentially it plays the game like a child, not especially strategically. Create a way for the AI to allow decisions to be made based on knowledge it gains from previous rounds.    
+* Improve the AI. At present it essentially just takes the highest value attribute for each card - It plays the game like a small child, not especially strategically. Create a way for the AI to allow decisions to be made based on knowledge it gains from previous rounds. Perhaps look at ways to introduce difficulty levels related to this.    
 * Preload everything a little more elegantly.   
 * Create some nice transitions between rounds.   
 * Improve the styling.   
