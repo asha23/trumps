@@ -18,7 +18,6 @@ This was tested to work in Google Chrome only for now.
 
 ## TODOS
 
-* Set up a redirect to the game so that when people hit the root, they go straight to it.
 * Cross-Browser testing
 
 To see a demo, visit
