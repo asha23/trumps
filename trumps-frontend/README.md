@@ -6,6 +6,8 @@ Currently this is all contained within the app.js - There are lots of todos!
 
 This calls a json API from the WordPress installation.
 
+The main app is in /src/app/app.js
+
 ## TODOS
 
 * Make the WordPress posts per_page value dynamic in the API Url. Currently it's set to 100.  
