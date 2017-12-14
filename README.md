@@ -18,6 +18,7 @@ This was tested to work in Google Chrome only.
 
 * Create a WordPress plugin so that the game can run via a shortcode anywhere in a theme. I have made a start on this. 
 * Set up a redirect to the game so that when people hit the root, they go straight to it.
+* Cross-Browser testing
 
 To see a demo, visit
 
