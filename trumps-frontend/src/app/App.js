@@ -1,21 +1,23 @@
 /*
-    Top Drunks Version 0.3
+    Top Drunks Version 1.0
 
     TODO: make the per_page value dynamic - it could be
     TODO: write some proper tests for everything
-    TODO: Add a star trump
     TODO: Make the whole thing 100% ES6
     TODO: Learn more React!!!
     TODO: Sort out the issue when a value is 10 - The other player wins - Odd
     TODO: DON'T USE LOCALSTORAGE - Learn Redux.
-    TODO: Fix the draw. At the moment it only works once :(
+    TODO: Add a star trump
 */
 
 import React, { Component } from 'react';
 import '../css/App.css';
 
 // Grab the json API from the WordPress installation
-const DATA = 'http://trumps.local/wp-json/wp/v2/trumps?per_page=100';
+// TODO: Make this a little more dynamic
+
+// const DATA = 'http://trumps.local/wp-json/wp/v2/trumps?per_page=100';
+const DATA = 'http://prtbl.net/dev/trumps/wp-json/wp/v2/trumps?per_page=100';
 
 class App extends Component {
     constructor(props) {
@@ -32,8 +34,16 @@ class App extends Component {
           star_trump:1,
           disableSelects:"",
           tookTheWinnings: "",
-
-
+          count:1,
+          result:"",
+          index1:0,
+          index2:1,
+          index3:2,
+          index4:3,
+          showHide: "shown",
+          showEndgame: "hidden",
+          winText:"",
+          removeButton:"shown"
         };
 
         this.callData = this.callData.bind(this);
@@ -46,7 +56,7 @@ class App extends Component {
         this.player1Wins = this.player1Wins.bind(this);
         this.player2Wins = this.player2Wins.bind(this);
         this.bothWin = this.bothWin.bind(this);
-        //this.toggleEndGame = this.toggleEndgame.bind(this);
+        this.player2Round = this.player2Round.bind(this);
     };
 
     // Call up the data when the app starts
@@ -58,6 +68,13 @@ class App extends Component {
     // Resets everything
     dealAllCards(list) {
         this.callData(list)
+
+        this.setState({
+            showHide: "shown",
+            showEndgame: "hidden",
+            removeButton:"shown",
+            winText:""
+        })
     };
 
 
@@ -130,7 +147,7 @@ class App extends Component {
 
         localStorage.setItem('deck1', JSON.stringify(deck1));
         localStorage.setItem('deck2', JSON.stringify(deck2));
-        localStorage.setItem('deck3', (null));
+        localStorage.setItem('deck3', JSON.stringify([]));
 
         this.dealCard(deck1, deck2);
 
@@ -138,94 +155,160 @@ class App extends Component {
 
     // Deal cards
 
-    dealCard(deck1, deck2) {
+    dealCard(deck1, deck2, count) {
 
-            // Get the first card in the deck
+        if (count === undefined) {
+            count = 1;
+        }
 
-            // Reset the local storage
+        this.setState({
+            result:""
+        })
 
-            localStorage.removeItem('player1Card');
-            localStorage.removeItem('player2Card');
+        // Get the first card in the deck
+        // Reset the local storage
 
-            let player1Card = deck1[0];
-            let player2Card = deck2[0];
+        localStorage.removeItem('player1Card');
+        localStorage.removeItem('player2Card');
 
-            // Store the player's current cards
+        let player1Card = deck1[0];
+        let player2Card = deck2[0];
 
-            localStorage.setItem('player1Card', JSON.stringify(player1Card));
-            localStorage.setItem('player2Card', JSON.stringify(player2Card));
+        if (count%2 === 0) {
 
-            if (player1Card === undefined || player2Card === undefined) {
-                this.endGame()
-                return;
-            }
+            this.player2Round(deck1, deck2);
 
-            // TODO Add a star trump
-
-            // console.log(player1Card.acf.star_trump);
-            // console.log(player2Card.acf.star_trump);
-            //
-            // if(player1Card.acf.star_trump === 0 || player2Card.acf.star_trump === 0) {
-            //     this.setState({
-            //         starTrump: "star-trump",
-            //         starTrumpText: "Star Trump"
-            //     })
-            // } else {
-            //     this.setState({
-            //         starTrump: "star-trump-hide",
-            //         starTrumpText: "Star Trump"
-            //     })
-            // }
-
-            // Show each player some cards
             this.setState({
+                disableSelects:"disabled",
+            })
 
-                deck1:deck1,
-                deck2:deck2,
+        } else {
+            this.setState({
+                disabled:"disabled",
+                disableSelects:""
+            })
+        }
 
-                player1Card:player1Card,
-                player2Card:player2Card,
+        // Store the player's current cards
 
-                // Player 1
-                p1ID: player1Card.id,
-                p1Title: player1Card.title.rendered,
-                p1Image: player1Card.acf.image,
-                p1Val1: player1Card.acf.value_1,
-                p1Val2: player1Card.acf.value_2,
-                p1Val3: player1Card.acf.value_3,
-                p1Val4: player1Card.acf.value_4,
+        localStorage.setItem('player1Card', JSON.stringify(player1Card));
+        localStorage.setItem('player2Card', JSON.stringify(player2Card));
+
+        if (player1Card === undefined || player2Card === undefined) {
+            this.endGame()
+            this.setState({
+                disabled:"disabled",
+                disableSelects:"disabled",
+            })
+            return;
+        }
+
+        // Show each player some cards
+        this.setState({
+
+            deck1:deck1,
+            deck2:deck2,
+
+            player1Card:player1Card,
+            player2Card:player2Card,
+
+            // Player 1
+            p1ID: player1Card.id,
+            p1Title: player1Card.title.rendered,
+            p1Image: player1Card.acf.image,
+            p1Val1: player1Card.acf.value_1,
+            p1Val2: player1Card.acf.value_2,
+            p1Val3: player1Card.acf.value_3,
+            p1Val4: player1Card.acf.value_4,
 
 
-                // Player 2
-                p2ID: player2Card.id,
-                p2Title: player2Card.title.rendered,
-                p2Image: player2Card.acf.image,
-                p2Val1: player2Card.acf.value_1,
-                p2Val2: player2Card.acf.value_2,
-                p2Val3: player2Card.acf.value_3,
-                p2Val4: player2Card.acf.value_4,
+            // Player 2
+            p2ID: player2Card.id,
+            p2Title: player2Card.title.rendered,
+            p2Image: player2Card.acf.image,
+            p2Val1: player2Card.acf.value_1,
+            p2Val2: player2Card.acf.value_2,
+            p2Val3: player2Card.acf.value_3,
+            p2Val4: player2Card.acf.value_4,
 
-                // p2Val1Hide: "???",
-                // p2Val2Hide: "???",
-                // p2Val3Hide: "???",
-                // p2Val4Hide: "???",
+            p2Val1Hide: "???",
+            p2Val2Hide: "???",
+            p2Val3Hide: "???",
+            p2Val4Hide: "???",
 
-                p2Val1Hide: player2Card.acf.value_1,
-                p2Val2Hide: player2Card.acf.value_2,
-                p2Val3Hide: player2Card.acf.value_3,
-                p2Val4Hide: player2Card.acf.value_4,
+            // Cards remaining
 
+            player1CardsLeft: deck1.length,
+            player2CardsLeft: deck2.length,
 
-                // Cards remaining
+        });
+    }
 
-                player1CardsLeft: deck1.length,
-                player2CardsLeft: deck2.length
+    // Player 2's turn
 
-            });
+    player2Round(deck1, deck2) {
+
+        // Some extremely basic AI. Essentially the computer just looks for the highest value attribute.
+        // TODO: Improve this AI, so the computer remembers previous player 1 cards attributes and picks more strategically
+
+        let player1Card = deck1[0];
+        let player2Card = deck2[0];
+
+        let player2CardVals = [];
+        let player1CardVals = [];
+
+        let parsedP1 = player1Card.acf;
+        let player1CardArray = [];
+
+        let parsedP2 = player2Card.acf;
+        let player2CardArray = [];
+
+        for(let x in parsedP1) {
+            player1CardArray.push(parseInt(parsedP1[x], 10));
+        }
+
+        for(let y in parsedP2) {
+            player2CardArray.push(parseInt(parsedP2[y], 10));
+        }
+
+        for (let i = 1; i < player2CardArray.length; i++) { // skip the image value here
+            player2CardVals.push(player2CardArray[i]);
+            player1CardVals.push(player1CardArray[i]);
+        }
+
+        // Get the index of the largest value in the array
+
+        let p2Index = player2CardVals.indexOf(Math.max(...player2CardVals));
+
+        // return the corresponding index of player 1's card
+
+        let p1 = player1CardVals[p2Index];
+        let p2 = player2CardVals[p2Index]
+
+        this.setState({
+            result:"I'm thinking...",
+            disabled:"disabled",
+            disableSelects:"disabled"
+        })
+
+        setTimeout(() => {
+            this.setState({
+                result:"",
+            })
+
+            // After pretending to think about it for a bit :) - do the who won routine
+            this.whoWon(p2Index, p1, p2)
+
+        }, 3000)
+
     }
 
     // Pass it back through for the next card choice
-    nextCard(deck1, deck2) {
+    nextCard(deck1, deck2, countVal) {
+
+        let count = countVal;
+
+        count ++;
 
         // Get the last cards played
 
@@ -238,24 +321,24 @@ class App extends Component {
             deck1 = JSON.parse(localStorage.getItem('deck1'));
             deck2 = JSON.parse(localStorage.getItem('deck2'));
 
-            // console.dir(deck1);
-            // console.dir(deck2);
-
-            this.dealCard(deck1,deck2);
+            this.dealCard(deck1, deck2, count);
 
             this.setState({
-                result:"",
-                disableSelects:"",
-                tookTheWinnings:""
+                tookTheWinnings:"",
+                count: count
             })
         }
     }
 
-    whoWon(p1, p2) {
-
+    // Work out who won the hand
+    whoWon(cardIndex, p1, p2) {
         if (p1 === undefined || p2 === undefined) {
             this.endGame();
-            return
+            this.setState({
+                disabled:"disabled",
+                disableSelects:"disabled"
+            })
+            return;
         }
 
         if (p1 > p2) {
@@ -271,11 +354,36 @@ class App extends Component {
             this.setState({result:"It's a draw!"})
         }
 
+        // Reveal player 2's result
+
+        if (cardIndex === 0) {
+            this.setState({
+                p2Val1Hide: this.state.p2Val1,
+            })
+        }
+
+        if (cardIndex === 1) {
+            this.setState({
+                p2Val2Hide: this.state.p2Val2,
+            })
+        }
+
+        if (cardIndex === 2) {
+            this.setState({
+                p2Val3Hide: this.state.p2Val3,
+            })
+        }
+
+        if (cardIndex === 3) {
+            this.setState({
+                p2Val4Hide: this.state.p2Val4,
+            })
+        }
+
         this.setState({
             disabled:"",
-            disableSelects:"disabled"
+            disableSelects:"disabled",
         })
-
     }
 
     player1Wins() {
@@ -290,6 +398,7 @@ class App extends Component {
 
         // Remove player2's card from their deck.
         let deck2 = JSON.parse(localStorage.getItem('deck2'));
+
         // remove the first item (which is their card)
         deck2.shift();
 
@@ -302,7 +411,8 @@ class App extends Component {
 
         let deck3 = JSON.parse(localStorage.getItem('deck3'));
 
-        if (deck3 !== null) {
+
+        if ( deck3.length !== 0 ) {
             // Add items from deck 3 to the end of the pack
 
             // TODO: Get better at ES6 and use .map
@@ -311,18 +421,22 @@ class App extends Component {
             }
 
             // Push the winnings to deck 1
+
             localStorage.setItem('deck1', JSON.stringify(deck1));
 
             // Clear deck 3
-            localStorage.removeItem('deck3');
+
+            localStorage.setItem('deck3', JSON.stringify([]));
 
             this.setState({
                 drawPotSize:0,
                 tookTheWinnings: "You took the winnings!"
             })
+
+
         } else {
 
-            localStorage.removeItem('deck3');
+            localStorage.setItem('deck3', JSON.stringify([]));
 
             this.setState({
                 tookTheWinnings:""
@@ -330,24 +444,23 @@ class App extends Component {
         }
 
         // re-store the decks back to local storage
+
         localStorage.setItem('deck1', JSON.stringify(deck1));
         localStorage.setItem('deck2', JSON.stringify(deck2));
 
         if (deck1.length === 0 || deck2.length === 0) {
-            this.endGame()
+            this.endGame();
+            this.setState({
+                disabled:"disabled",
+                disableSelects:"disabled",
+            })
             return;
         } else {
             this.setState({
                 player1CardsLeft: deck1.length,
                 player2CardsLeft: deck2.length,
-
-                p2Val1Hide: this.state.p2Val1,
-                p2Val2Hide: this.state.p2Val2,
-                p2Val3Hide: this.state.p2Val3,
-                p2Val4Hide: this.state.p2Val4
             })
         }
-
     }
 
     player2Wins() {
@@ -370,11 +483,12 @@ class App extends Component {
 
         let deck3 = JSON.parse(localStorage.getItem('deck3'));
 
-        if (deck3 !== null) {
+        if (deck3.length !== 0) {
             // Add items from deck 3 to the end of the pack
 
             // Loop over deck 3 and push each item in turn
             // TODO: Get better at ES6 and use .map
+
             for (let i = 0; i < deck3.length; i++) {
                 deck2.push(deck3[i]);
             }
@@ -384,8 +498,7 @@ class App extends Component {
 
             // Clear deck 3
 
-
-            localStorage.removeItem('deck3');
+            localStorage.setItem('deck3', JSON.stringify([]));
 
 
             this.setState({
@@ -393,10 +506,7 @@ class App extends Component {
                 tookTheWinnings: "I took the winnings!"
             })
 
-
         } else {
-
-            localStorage.removeItem('deck3');
 
             this.setState({
                 tookTheWinnings:""
@@ -409,16 +519,15 @@ class App extends Component {
 
         if (deck1.length === 0 || deck2.length === 0) {
             this.endGame()
+            this.setState({
+                disabled:"disabled",
+                disableSelects:"disabled",
+            })
             return;
         } else {
             this.setState({
                 player1CardsLeft: deck1.length,
                 player2CardsLeft: deck2.length,
-
-                p2Val1Hide: this.state.p2Val1,
-                p2Val2Hide: this.state.p2Val2,
-                p2Val3Hide: this.state.p2Val3,
-                p2Val4Hide: this.state.p2Val4
             })
         }
 
@@ -426,10 +535,10 @@ class App extends Component {
 
     bothWin() {
         // Make a pot of cards - Winner of the next hand takes these cards
-        // TODO: If there are more than 2 rounds of draws - Sort that logic
 
         // get both player 1 and player 2's cards
-        let deck3 = []; // TODO: this is breaking that functionality
+        //
+        let deck3 = JSON.parse(localStorage.getItem('deck3'));
         let player1Card = JSON.parse(localStorage.getItem('player1Card'));
         let player2Card = JSON.parse(localStorage.getItem('player2Card'));
         let deck1 = JSON.parse(localStorage.getItem('deck1'));
@@ -459,23 +568,31 @@ class App extends Component {
         })
     }
 
-
-
-
     // When all the cards are gone - do the endgame
+    //
     endGame() {
-        console.log("endgame");
 
-        this.toggleEndGame();
+        let winText;
 
         let deck1 = JSON.parse(localStorage.getItem('deck1'));
         let deck2 = JSON.parse(localStorage.getItem('deck2'));
 
+        if (deck1.length === 0) {
+            winText = "Player 2 Wins!"
+        } else {
+            winText = "Player 1 Wins!"
+        }
+
         this.setState({
-            disabled:"",
+            disabled:"disabled",
+            disableSelects:"disabled",
             player1CardsLeft: deck1.length,
             player2CardsLeft: deck2.length,
-            hide: !this.state.hide
+            showHide:"hidden",
+            showEndgame:"shown",
+            winText: winText,
+            removeButton:"hidden",
+            result:""
         })
     }
 
@@ -488,11 +605,6 @@ class App extends Component {
                     <p>Draw pot size: {this.state.drawPotSize}<br/>{this.state.tookTheWinnings}</p>
                 </div>
                 <hr />
-                <div className={'hide-' + this.state.hide} >
-                    <div className="col-md-12">
-                        Wooo Hoo Winner winner chicken dinner
-                    </div>
-                </div>
                 <div className="row" >
 
                     <div className="col-md-4 text-left">
@@ -502,85 +614,122 @@ class App extends Component {
                     </div>
                     <div className="col-md-4">
                         <div className="result clearfix centered">
-                            <button disabled className="btn btn-disabled">{this.state.result}</button>
+                            <button disabled className="btn disabled">{this.state.result}</button>
                         </div>
                     </div>
 
                     <div className="col-md-4">
 
                         <div className="text-right">
-                            <button disabled={this.state.disabled} className="btn btn-primary" onClick={() => this.nextCard(this.state.deck1,this.state.deck2)} >
-                                Next Round
-                            </button>
-
+                            <span className={this.state.removeButton}>
+                                <button disabled={this.state.disabled} className="btn btn-primary" onClick={() => this.nextCard(this.state.deck1, this.state.deck2, this.state.count)} >
+                                    Next Round
+                                </button>
+                            </span>
                         </div>
                     </div>
                 </div>
                 <hr />
-                <div className="row game-state-playing">
-                    <div className="col-xl-2 col-lg-0"></div>
-                    <div className="col-xl-4 col-lg-6 col-sm-6">
-                        <div className="heading centered">
-                            <h2>You</h2>
-                            <hr />
-                            <h3>Cards Remaining: {this.state.player1CardsLeft}</h3>
-                            <p>&nbsp;</p>
-                        </div>
-                        <div className="card" key={this.state.p1ID}>
-                            {/* <div className={this.state.starTrump}>{this.state.starTrumpText}</div> */}
-                            <img className="card-img-top round" src={this.state.p1Image} alt={this.state.p1Title} />
-                            <div className="card-block">
+                <div className={this.state.showHide}>
+                    <div className="row game-state-playing">
 
+                        <div className="col-xl-2 col-lg-0"></div>
+                        <div className="col-xl-4 col-lg-6 col-sm-6">
+                            <div className="heading centered">
+                                <h2>You</h2>
+                                <hr />
+                                <h3>Cards Remaining: {this.state.player1CardsLeft}</h3>
+                                <p>&nbsp;</p>
+                            </div>
+                            <div className="card" key={this.state.p1ID}>
 
-                                <h3 className="card-title centered">{this.state.p1Title}</h3>
-                                <div className="card-text">
-                                    <p>
-                                        <button disabled={this.state.disableSelects} className="btn btn-primary full" onClick={() => this.whoWon(this.state.p1Val1, this.state.p2Val1)}>Drunk Factor: {this.state.p1Val1}</button>
-                                    </p>
-                                    <p>
-                                        <button disabled={this.state.disableSelects} className="btn btn-primary full" onClick={() => this.whoWon(this.state.p1Val2, this.state.p2Val2)}>Hangover Length: {this.state.p1Val2}</button>
-                                    </p>
-                                    <p>
-                                        <button disabled={this.state.disableSelects} className="btn btn-primary full" onClick={() => this.whoWon(this.state.p1Val3, this.state.p2Val3)}>Embarrassment Level: {this.state.p1Val3}</button>
-                                    </p>
-                                    <p>
-                                        <button disabled={this.state.disableSelects} className="btn btn-primary full" onClick={() => this.whoWon(this.state.p1Val4, this.state.p2Val4)}>People Offended: {this.state.p1Val4}</button>
-                                    </p>
+                                <img className="card-img-top round" src={this.state.p1Image} alt={this.state.p1Title} />
+                                <div className="card-block">
+
+                                    <h3 className="card-title centered">{this.state.p1Title}</h3>
+                                    <div className="card-text">
+                                        <p>
+                                            <button disabled={this.state.disableSelects}
+                                                className="btn btn-primary full"
+                                                onClick={() => this.whoWon(this.state.index1, this.state.p1Val1, this.state.p2Val1)}
+                                            >
+                                                Drunk Factor: {this.state.p1Val1}
+                                            </button>
+                                        </p>
+                                        <p>
+                                            <button disabled={this.state.disableSelects}
+                                                className="btn btn-primary full"
+                                                onClick={() => this.whoWon(this.state.index2, this.state.p1Val2, this.state.p2Val2)}
+                                            >
+                                                Hangover Length: {this.state.p1Val2}
+                                            </button>
+                                        </p>
+                                        <p>
+                                            <button disabled={this.state.disableSelects}
+                                                className="btn btn-primary full"
+                                                onClick={() => this.whoWon(this.state.index3, this.state.p1Val3, this.state.p2Val3)}
+                                            >
+                                                Embarrassment Level: {this.state.p1Val3}
+                                            </button>
+                                        </p>
+                                        <p>
+                                            <button disabled={this.state.disableSelects}
+                                                className="btn btn-primary full"
+                                                onClick={() => this.whoWon(this.state.index4, this.state.p1Val4, this.state.p2Val4)}
+                                            >
+                                                People Offended: {this.state.p1Val4}
+                                            </button>
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div className="col-xl-4 col-lg-6 col-sm-6">
-                        <div className="heading centered">
-                            <h2>Your Computer</h2>
-                            <hr />
-                            <h3>Cards Remaining: {this.state.player2CardsLeft}</h3>
-                            <p>&nbsp;</p>
-                        </div>
-                        <div className="card" key={this.state.p2ID}>
-                            {/* <div className={this.state.starTrump}>{this.state.starTrumpText}</div> */}
-                            <img className="card-img-top round" src={this.state.p2Image} alt={this.state.p2Title} />
-                            <div className="card-block">
-                                <h3 className="card-title centered">{this.state.p2Title}</h3>
-                                <div className="card-text">
-                                    <p>
-                                        <button disabled className="btn btn-disabled full">Drunk Factor: {this.state.p2Val1Hide}</button>
-                                    </p>
-                                    <p>
-                                        <button disabled className="btn btn-disabled full">Hangover Length: {this.state.p2Val2Hide}</button></p>
-                                    <p>
-                                        <button disabled className="btn btn-disabled full">Embarrassment Level: {this.state.p2Val3Hide}</button></p>
-                                    <p>
-                                        <button disabled className="btn btn-disabled full">People Offended: {this.state.p2Val4Hide}</button></p>
+                        <div className="col-xl-4 col-lg-6 col-sm-6">
+                            <div className="heading centered">
+                                <h2>Your Computer</h2>
+                                <hr />
+                                <h3>Cards Remaining: {this.state.player2CardsLeft}</h3>
+                                <p>&nbsp;</p>
+                            </div>
+                            <div className="card" key={this.state.p2ID}>
+
+                                <img className="card-img-top round" src={this.state.p2Image} alt={this.state.p2Title} />
+                                <div className="card-block">
+                                    <h3 className="card-title centered">{this.state.p2Title}</h3>
+                                    <div className="card-text">
+                                        <p>
+                                            <button disabled className="btn btn-disabled full">Drunk Factor: {this.state.p2Val1Hide}</button>
+                                        </p>
+                                        <p>
+                                            <button disabled className="btn btn-disabled full">Hangover Length: {this.state.p2Val2Hide}</button>
+                                        </p>
+                                        <p>
+                                            <button disabled className="btn btn-disabled full">Embarrassment Level: {this.state.p2Val3Hide}</button>
+                                        </p>
+                                        <p>
+                                            <button disabled className="btn btn-disabled full">People Offended: {this.state.p2Val4Hide}</button>
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
+
+                        <div className="col-xs-2 col-lg-0"></div>
+
                     </div>
 
-                    <div className="col-xs-2 col-lg-0"></div>
+                </div>
 
-
+                <div className={this.state.showEndgame}>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <h1 className="centered">{this.state.winText}</h1>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
                 </div>
 
                 <div className="footer centered">

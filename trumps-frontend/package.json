@@ -2,6 +2,7 @@
   "name": "trumps-frontend",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://prtbl.net/dev/trumps/trumps-frontend",
   "dependencies": {
     "bootstrap": "^4.0.0-beta.2",
     "chai": "^4.1.2",
