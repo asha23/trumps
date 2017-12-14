@@ -4,7 +4,9 @@ Created using create-react-app
 
 Currently this is all contained within the app.js
 
-This calls a json API from the WordPress installation.
+This calls data from the WordPress API. This can be viewed in Postman using the following URL
+
+http://prtbl.net/dev/trumps/wp-json/wp/v2/trumps?per_page=100
 
 The main app is in /src/app/app.js
 
