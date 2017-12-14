@@ -16,7 +16,7 @@ The main app is in /src/app/app.js
 * Learn more React!!! (Obviously)    
 * Sort out the issue when a value is 10 - The other player wins - Odd   
 * DON'T USE LOCALSTORAGE! - Whilst this works and made tracking the card logic pretty straightforward and quick to achieve, it would probably be better to use Redux.   
-* Add a star Trump Card.   
+* Add a Star Trump card. (FYI - It's Shane McGowan!)    
 * Lots of refactoring to make this all far more streamlined. 
 * Break it down into more organised React components.   
 * Improve the AI. At present it essentially just takes the highest value attribute for each card - Essentially it plays the game like a child, not especially strategically. Create a way for the AI to allow decisions to be made based on knowledge it gains from previous rounds.    
