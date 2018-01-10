@@ -63,12 +63,12 @@ class App extends Component {
 
     // Call up the data when the app starts
 
-    componentDidMount() {
+    componentDidMount = () => {
       this.callData();
     };
 
     // Resets everything
-    dealAllCards(list) {
+    dealAllCards = (list) => {
         this.callData(list)
 
         this.setState({
@@ -79,9 +79,8 @@ class App extends Component {
         })
     };
 
-
     // Do the data - Returns "list" as an object/array
-    callData(data) {
+    callData = (data) => {
         fetch(`${DATA}`)
           .then(list => list.json())
           .then(list => this.doDataState(list))
@@ -95,7 +94,7 @@ class App extends Component {
     // We need this to keep the arrays of cards up to date
     // TODO - Set this up using a proper store method such as REDUX
 
-    doDataState(list) {
+    doDataState = (list) => {
 
         // Wipe local storage
         localStorage.removeItem('deck');
@@ -108,7 +107,7 @@ class App extends Component {
         // set local storage for all the data
         localStorage.setItem('deck', JSON.stringify(list));
 
-        setTimeout(function() { // Weird. This only works with a delay - No idea why this is
+        setTimeout(() => { // Weird. This only works with a delay - No idea why this is
             list = JSON.parse(localStorage.getItem('deck'));
         }, 50);
 
@@ -116,8 +115,7 @@ class App extends Component {
     };
 
     // Shuffle the cards
-
-    shuffleCards(list) {
+    shuffleCards = (list) => {
         for (let i = list.length - 1; i > 0; i--) {
             let j = Math.floor( Math.random() * ( i + 1 ) );
             [ list[i], list[j] ] = [ list[j], list[i] ];
@@ -128,8 +126,7 @@ class App extends Component {
     };
 
     // Deal 2 sets of cards
-
-    dealTwoSets(list) {
+    dealTwoSets = (list) => {
 
         let deck1 = [];
         let deck2 = [];
@@ -146,7 +143,6 @@ class App extends Component {
         }
 
         // Store the decks initially
-
         localStorage.setItem('deck1', JSON.stringify(deck1));
         localStorage.setItem('deck2', JSON.stringify(deck2));
         localStorage.setItem('deck3', JSON.stringify([]));
@@ -156,8 +152,7 @@ class App extends Component {
     };
 
     // Deal cards
-
-    dealCard(deck1, deck2, count) {
+    dealCard = (deck1, deck2, count) => {
 
         if (count === undefined) {
             count = 1;
@@ -169,7 +164,6 @@ class App extends Component {
 
         // Get the first card in the deck
         // Reset the local storage
-
         localStorage.removeItem('player1Card');
         localStorage.removeItem('player2Card');
 
@@ -184,7 +178,7 @@ class App extends Component {
                 disableSelects:"disabled",
                 borderHighlightPlayer1:"card",
                 borderHighlightPlayer2:"card player2"
-            })
+            });
 
         } else {
             this.setState({
@@ -192,20 +186,19 @@ class App extends Component {
                 disableSelects:"",
                 borderHighlightPlayer1:"card player1",
                 borderHighlightPlayer2:"card"
-            })
+            });
         }
 
         // Store the player's current cards
-
         localStorage.setItem('player1Card', JSON.stringify(player1Card));
         localStorage.setItem('player2Card', JSON.stringify(player2Card));
 
         if (player1Card === undefined || player2Card === undefined) {
-            this.endGame()
+            this.endGame();
             this.setState({
                 disabled:"disabled",
                 disableSelects:"disabled",
-            })
+            });
             return;
         }
 
@@ -226,7 +219,6 @@ class App extends Component {
             p1Val2: player1Card.acf.value_2,
             p1Val3: player1Card.acf.value_3,
             p1Val4: player1Card.acf.value_4,
-
 
             // Player 2
             p2ID: player2Card.id,
@@ -252,7 +244,7 @@ class App extends Component {
 
     // Player 2's turn
 
-    player2Round(deck1, deck2) {
+    player2Round = (deck1, deck2) => {
 
         // Some extremely basic AI. Essentially the computer just looks for the highest value attribute.
         // TODO: Improve this AI, so the computer remembers previous player 1 cards attributes and picks more strategically
@@ -283,48 +275,43 @@ class App extends Component {
         }
 
         // Get the index of the largest value in the array
-
         let p2Index = player2CardVals.indexOf(Math.max(...player2CardVals));
 
         // return the corresponding index of player 1's card
-
         let p1 = player1CardVals[p2Index];
-        let p2 = player2CardVals[p2Index]
+        let p2 = player2CardVals[p2Index];
 
         this.setState({
             result:"I'm thinking...",
             disabled:"disabled",
             disableSelects:"disabled",
+        });
 
-        })
-
+        // After pretending to think about it for a bit :) - do the who won routine
         setTimeout(() => {
             this.setState({
                 result:"",
-            })
+            });
 
-            // After pretending to think about it for a bit :) - do the who won routine
-            this.whoWon(p2Index, p1, p2)
+            this.whoWon(p2Index, p1, p2);
 
-        }, 3000)
+        }, 3000);
 
     }
 
     // Pass it back through for the next card choice
-    nextCard(deck1, deck2, countVal) {
+    nextCard = (deck1, deck2, countVal) => {
 
         let count = countVal;
 
         count ++;
 
         // Get the last cards played
-
         if (deck1.length === 0 || deck2.length === 0) {
             this.endGame();
         } else {
 
             // Get the decks from the Store
-
             deck1 = JSON.parse(localStorage.getItem('deck1'));
             deck2 = JSON.parse(localStorage.getItem('deck2'));
 
@@ -338,35 +325,36 @@ class App extends Component {
     }
 
     // Work out who won the hand
-    whoWon(cardIndex, p1, p2) {
+    whoWon = (cardIndex, p1, p2) => {
         if (p1 === undefined || p2 === undefined) {
             this.endGame();
             this.setState({
                 disabled:"disabled",
                 disableSelects:"disabled"
-            })
+            });
             return;
         }
 
         if (p1 > p2) {
             this.player1Wins();
-            this.setState({result:"You won this round!"})
+            this.setState({result:"You won this round!"});
         }
+
         if (p1 < p2) {
             this.player2Wins();
-            this.setState({result:"I won this round!"})
+            this.setState({result:"I won this round!"});
         }
+
         if (p1 === p2) {
             this.bothWin();
-            this.setState({result:"It's a draw!"})
+            this.setState({result:"It's a draw!"});
         }
 
         // Reveal player 2's result
-
         if (cardIndex === 0) {
             this.setState({
                 p2Val1Hide: this.state.p2Val1,
-            })
+            });
         }
 
         if (cardIndex === 1) {
@@ -378,22 +366,22 @@ class App extends Component {
         if (cardIndex === 2) {
             this.setState({
                 p2Val3Hide: this.state.p2Val3,
-            })
+            });
         }
 
         if (cardIndex === 3) {
             this.setState({
                 p2Val4Hide: this.state.p2Val4,
-            })
+            });
         }
 
         this.setState({
             disabled:"",
             disableSelects:"disabled",
-        })
+        });
     }
 
-    player1Wins() {
+    player1Wins = () => {
 
         // Push player2's card into the end of player 1's deck
         let deck1 = JSON.parse(localStorage.getItem('deck1'));
@@ -410,7 +398,6 @@ class App extends Component {
         deck2.shift();
 
         // re-store the decks back to local storage
-
         localStorage.setItem('deck1', JSON.stringify(deck1));
         localStorage.setItem('deck2', JSON.stringify(deck2));
 
@@ -418,9 +405,8 @@ class App extends Component {
 
         let deck3 = JSON.parse(localStorage.getItem('deck3'));
 
-
         if ( deck3.length !== 0 ) {
-            // Add items from deck 3 to the end of the pack
+            // Add items from deck 3 to the end of the pack if there is a draw pot
 
             // TODO: Get better at ES6 and use .map
             for (let i = 0; i < deck3.length; i++) {
@@ -428,11 +414,9 @@ class App extends Component {
             }
 
             // Push the winnings to deck 1
-
             localStorage.setItem('deck1', JSON.stringify(deck1));
 
             // Clear deck 3
-
             localStorage.setItem('deck3', JSON.stringify([]));
 
             this.setState({
@@ -440,18 +424,16 @@ class App extends Component {
                 tookTheWinnings: "You took the winnings!"
             })
 
-
         } else {
 
             localStorage.setItem('deck3', JSON.stringify([]));
 
             this.setState({
                 tookTheWinnings:""
-            })
+            });
         }
 
         // re-store the decks back to local storage
-
         localStorage.setItem('deck1', JSON.stringify(deck1));
         localStorage.setItem('deck2', JSON.stringify(deck2));
 
@@ -460,17 +442,19 @@ class App extends Component {
             this.setState({
                 disabled:"disabled",
                 disableSelects:"disabled",
-            })
+            });
+
             return;
+
         } else {
             this.setState({
                 player1CardsLeft: deck1.length,
                 player2CardsLeft: deck2.length,
-            })
+            });
         }
     }
 
-    player2Wins() {
+    player2Wins = () => {
 
         // push player1's card into the end of player 2's deck
         let deck2 = JSON.parse(localStorage.getItem('deck2'));
@@ -487,15 +471,13 @@ class App extends Component {
         deck1.shift();
 
         // See if there is anything in deck 3
-
         let deck3 = JSON.parse(localStorage.getItem('deck3'));
 
         if (deck3.length !== 0) {
-            // Add items from deck 3 to the end of the pack
+            // Add items from deck 3 to the end of the pack if there is a draw pot
 
             // Loop over deck 3 and push each item in turn
             // TODO: Get better at ES6 and use .map
-
             for (let i = 0; i < deck3.length; i++) {
                 deck2.push(deck3[i]);
             }
@@ -504,20 +486,17 @@ class App extends Component {
             localStorage.setItem('deck1', JSON.stringify(deck1));
 
             // Clear deck 3
-
             localStorage.setItem('deck3', JSON.stringify([]));
-
 
             this.setState({
                 drawPotSize:0,
                 tookTheWinnings: "I took the winnings!"
-            })
+            });
 
         } else {
-
             this.setState({
                 tookTheWinnings:""
-            })
+            });
         }
 
         // re-store the decks back to local storage
@@ -525,26 +504,27 @@ class App extends Component {
         localStorage.setItem('deck2', JSON.stringify(deck2));
 
         if (deck1.length === 0 || deck2.length === 0) {
-            this.endGame()
+            this.endGame();
             this.setState({
                 disabled:"disabled",
                 disableSelects:"disabled",
-            })
+            });
+
             return;
+
         } else {
             this.setState({
                 player1CardsLeft: deck1.length,
                 player2CardsLeft: deck2.length,
-            })
+            });
         }
 
     }
 
-    bothWin() {
+    bothWin = () => {
         // Make a pot of cards - Winner of the next hand takes these cards
 
         // get both player 1 and player 2's cards
-        //
         let deck3 = JSON.parse(localStorage.getItem('deck3'));
         let player1Card = JSON.parse(localStorage.getItem('player1Card'));
         let player2Card = JSON.parse(localStorage.getItem('player2Card'));
@@ -552,18 +532,15 @@ class App extends Component {
         let deck2 = JSON.parse(localStorage.getItem('deck2'));
 
         // remove these from both players deck
-
         deck1.shift();
         deck2.shift();
 
         // Push the updated packs back into local storage
-
         localStorage.setItem('deck1', JSON.stringify(deck1));
         localStorage.setItem('deck2', JSON.stringify(deck2));
 
         // add them to a new deck (Deck 3)
-
-        deck3.push(player1Card)
+        deck3.push(player1Card);
         deck3.push(player2Card);
 
         localStorage.setItem('deck3', JSON.stringify(deck3));
@@ -576,8 +553,7 @@ class App extends Component {
     }
 
     // When all the cards are gone - do the endgame
-    //
-    endGame() {
+    endGame = () => {
 
         let winText;
 
@@ -600,10 +576,13 @@ class App extends Component {
             winText: winText,
             removeButton:"hidden",
             result:""
-        })
+        });
     }
 
-    render() {
+    // End of game logic
+
+    // Render the frontend
+    render = () => {
         return (
 
             <div className="container">
@@ -721,7 +700,6 @@ class App extends Component {
                                 </div>
                             </div>
                         </div>
-
 
                         <div className="col-xs-2 col-lg-0"></div>
 
