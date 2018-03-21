@@ -1,4 +1,4 @@
-# Top Drunks!
+# Top Trumps
 
 This uses a barebones WordPress installation and the v2 API to serve data via advanced custom fields to a React application.
 
