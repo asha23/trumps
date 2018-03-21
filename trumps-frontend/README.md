@@ -13,7 +13,7 @@ The main app is in /src/app/app.js
 ## TODOS
 
 * Make the WordPress posts per_page value dynamic in the API Url. Currently it's set to 100.  
-* Wite some unit tests for everything.   
+* Write some unit tests for everything.   
 * Make the whole thing 100% ES6 - Currently it's a bit of a hotchpotch.   
 * Learn more React!!! (Obviously)    
 * Sort out the issue when a value is 10 - The other player wins - Odd   
